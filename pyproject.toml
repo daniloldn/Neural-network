@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "neural network"
+version = "0.1.0"
+description = "Creating my own neural net"
+authors = [
+  { name = "Danilo de Souza"}
+]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "pandas >=1.5",
+  "numpy >=1.23"
+]
+
+[tool.black]
+line-length = 88
+target-version = ['py312']
+
+[tool.mypy]
+ignore_missing_imports = true
+strict = true
