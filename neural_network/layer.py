@@ -1,3 +1,4 @@
+from typing import Sequence, Union, Callable, Optional
 from .neuron import Neuron
 
 class Layer:
