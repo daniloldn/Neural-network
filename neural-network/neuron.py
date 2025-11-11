@@ -4,6 +4,9 @@ def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
 class Neuron:
+    """a neuron with:
+    - sigmoid activation function 
+    """
     def __init__(self, weight, bias):
         self.weight = weight
         self.bias = bias
