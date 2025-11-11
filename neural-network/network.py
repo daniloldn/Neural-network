@@ -1,4 +1,5 @@
 import numpy as np
+from neuron import Neuron
 
 
 class Network:
@@ -7,5 +8,20 @@ class Network:
     - h hidden layers
     - y outputs"""
 
-    def __init__(self):
-        pass
+    def __init__(self, depth, width):
+        self.depth = depth
+        self.width = width
+        
+        
+
+    def feedforwad(self, x):
+        inputs = x.shape[1]
+        d = self.depth
+        q = self.width
+        weights = [np.random.normal() for i in range((inputs*d*q)+q)]
+
+
+
+                
+
+        
