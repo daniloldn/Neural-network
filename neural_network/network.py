@@ -20,6 +20,9 @@ class Network:
         q = self.width
         weights = [np.random.normal() for i in range((inputs*d*q)+q)]
 
+        # need to add layers now that the Layers class is made and working
+        
+
 
 
                 
