@@ -59,7 +59,7 @@ class Neuron:
     def __init__(
         self, n_inputs: int, id: int, activation: Optional[Callable] = None
     ) -> None:
-        self.weights = np.random.normal(size=n_inputs)
+        self.weights = np.transpose(np.array([np.random.normal(size=n_inputs)]))
         self.bias = np.random.normal()
         self.id = id
         self.n_inputs = n_inputs
@@ -68,5 +68,5 @@ class Neuron:
     def feed_forward(self, inputs: Sequence[float]) -> float:
         # compute weighted sum plus bias and apply activation
         x = np.array(inputs)
-        z = np.dot(self.weights, x) + self.bias
+        z = np.dot(x, self.weights) + self.bias
         return self.activation(z)

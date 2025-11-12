@@ -6,10 +6,9 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from neural_network.network import Network
 
-x = np.array([[1, 2, 3], [2, 3, 4]])
+x = np.array([[1, 2], [2, 3], [2, 4]])
 y = np.array([4])
 
-net = Network(x, y, 2, 2)
+net = Network(x, y, 1, 2)
 print(net.loss)
-print(net.network)
-print((net.network[1])[0].neurons)
+print(net.feedforward(x))
