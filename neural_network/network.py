@@ -1,5 +1,7 @@
 import numpy as np
-from layer import Layer
+
+from .activation import sigmoid
+from .layer import Layer
 
 
 class Network:
@@ -8,17 +10,29 @@ class Network:
     - h hidden layers
     - y outputs"""
 
-    def __init__(self, inputs, output, depth, width, activation, loss):
+    def __init__(self, inputs, output, depth, width, activation=sigmoid, loss=None):
 
         self.loss = loss
+        self.depth = depth
         self.init_layer = Layer((inputs.shape[1]), width, activation)
         self.hidden_layer = [Layer(width, width, activation) for _ in range(depth - 1)]
-        self.output_layer = Layer(width, output.shape[1], activation)
+        self.output_layer = Layer(width, 1, activation)
+        self.network = [self.init_layer, self.hidden_layer, self.output_layer]
 
-    def feedforwad(self, x):
-        inputs = x.shape[1]
-        d = self.depth
-        q = self.width
-        weights = [np.random.normal() for i in range((inputs * d * q) + q)]
+    def _hidden_recursion(self, x):
+        """Recursively feed forward through hidden layers"""
 
-        # need to add layers now that the Layers class is made and working
+        def _recursive_forward(layer_input, layer_index):
+            if layer_index >= len(self.hidden_layer):
+                return layer_input
+
+            current_output = self.hidden_layer[layer_index].feed_forward(layer_input)
+            return _recursive_forward(current_output, layer_index + 1)
+
+        return _recursive_forward(x, 0)
+
+    def feedforward(self, x):
+        first_step = self.init_layer.feed_forward(x)
+        hidden_step = self._hidden_recursion(first_step)
+        output = self.output_layer.feed_forward(hidden_step)
+        return output
