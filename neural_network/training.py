@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def mse_loss(y_true: np.array, y_pred: np.array) -> int:
+def mse_loss(y_true: np.array, y_pred: np.array) -> float:
     """
     Compute the mean squared error (MSE) between ground-truth and predicted values.
     Parameters
