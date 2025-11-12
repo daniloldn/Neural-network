@@ -1,5 +1,5 @@
 import numpy as np
-from neuron import Neuron
+from layer import Layer
 
 
 class Network:
@@ -8,9 +8,12 @@ class Network:
     - h hidden layers
     - y outputs"""
 
-    def __init__(self, depth, width):
-        self.depth = depth
-        self.width = width
+    def __init__(self, inputs, output, depth, width, activation, loss):
+
+        self.loss = loss
+        self.init_layer = Layer((inputs.shape[1]), width, activation)
+        self.hidden_layer = [Layer(width, width, activation) for _ in range(depth - 1)]
+        self.output_layer = Layer(width, output.shape[1], activation)
 
     def feedforwad(self, x):
         inputs = x.shape[1]
