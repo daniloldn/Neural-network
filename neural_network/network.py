@@ -16,7 +16,7 @@ class Network:
         self.depth = depth
         self.init_layer = Layer((inputs.shape[1]), width, activation)
         self.hidden_layer = [Layer(width, width, activation) for _ in range(depth - 1)]
-        self.output_layer = Layer(width, 1, activation)
+        self.output_layer = Layer(width, 1, activation, final=True)
         self.network = [self.init_layer, self.hidden_layer, self.output_layer]
 
     def _hidden_recursion(self, x):
@@ -33,6 +33,9 @@ class Network:
 
     def feedforward(self, x):
         first_step = self.init_layer.feed_forward(x)
-        hidden_step = self._hidden_recursion(first_step)
-        output = self.output_layer.feed_forward(hidden_step)
+        if self.depth > 1:
+            hidden_step = self._hidden_recursion(first_step)
+            output = self.output_layer.feed_forward(hidden_step)
+        else:
+            output = self.output_layer.feed_forward(first_step)
         return output

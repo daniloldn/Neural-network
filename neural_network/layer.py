@@ -46,9 +46,15 @@ class Layer:
     """
 
     def __init__(
-        self, n_inputs: int, n_neurons: int, activation: Optional[Callable] = None
+        self,
+        n_inputs: int,
+        n_neurons: int,
+        activation: Optional[Callable] = None,
+        final=False,
     ):
-        self.neurons = [Neuron(n_inputs, i, activation) for i in range(n_neurons)]
+        self.neurons = [
+            Neuron(n_inputs, i, activation, final) for i in range(n_neurons)
+        ]
 
     def feed_forward(self, inputs):
         self.output = [
