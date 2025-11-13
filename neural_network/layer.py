@@ -1,5 +1,7 @@
 from typing import Callable, Optional
 
+import numpy as np
+
 from .neuron import Neuron
 
 
@@ -56,8 +58,19 @@ class Layer:
             Neuron(n_inputs, i, activation, final) for i in range(n_neurons)
         ]
 
-    def feed_forward(self, inputs):
+    def feed_layer(self, inputs):
         self.output = [
             self.neurons[i].feed_forward(inputs) for i in range(len(self.neurons))
         ]
-        return self.output
+        print("called feed layer")
+        print(self.output, "self output")
+        if len(self.neurons) > 1:
+            self.out = np.concatenate((self.output[0], self.output[1]), axis=1)
+            for i in range(len(self.neurons) - 2):
+                self.out = np.concatenate(self.output[i + 2], self.out)
+            print(self.out, "self out after concat")
+            return self.out
+
+        print(self.output[0], "self out")
+        print(self.output[0].shape, "self out shape")
+        return self.output[0]

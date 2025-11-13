@@ -21,21 +21,29 @@ class Network:
 
     def _hidden_recursion(self, x):
         """Recursively feed forward through hidden layers"""
+        print(x, "x in hidden recursion")
+        print(len(self.hidden_layer), "length of hidden layer")
 
         def _recursive_forward(layer_input, layer_index):
+            print(layer_index, "layer index")
             if layer_index >= len(self.hidden_layer):
                 return layer_input
 
-            current_output = self.hidden_layer[layer_index].feed_forward(layer_input)
+            print("calling feed layer for hidden layer index:", layer_index)
+            current_output = self.hidden_layer[layer_index].feed_layer(layer_input)
             return _recursive_forward(current_output, layer_index + 1)
 
         return _recursive_forward(x, 0)
 
     def feedforward(self, x):
-        first_step = self.init_layer.feed_forward(x)
+        print("calling first step with x:", x)
+        first_step = self.init_layer.feed_layer(x)
+        print(first_step, "first step")
         if self.depth > 1:
+            print("we are in the hiddden layers")
             hidden_step = self._hidden_recursion(first_step)
-            output = self.output_layer.feed_forward(hidden_step)
+            print("calling output layer with hidden step:", hidden_step)
+            output = self.output_layer.feed_layer(hidden_step)
         else:
-            output = self.output_layer.feed_forward(first_step)
+            output = self.output_layer.feed_layer(first_step)
         return output

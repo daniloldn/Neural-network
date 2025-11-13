@@ -69,11 +69,12 @@ class Neuron:
     def feed_forward(self, inputs: Sequence[float]) -> float:
         # compute weighted sum plus bias and apply activation
         x = np.array(inputs)
-        if self.final:
-            x = np.transpose(x)
-        print(x.shape)
-        print(self.weights.shape)
+        print("called feed forward for neuronwith inputs:", x)
+        print(self.final, "self final")
+        # if self.final:
+        # x = np.transpose(x)
+        print(x.shape, "x shape")
+        print(self.weights.shape, "weights shape")
         z = np.dot(x, self.weights) + self.bias
-        print(z, self.id)
-        print(z.shape)
+        print(z, z.shape, "z and  z shape")
         return self.activation(z)
