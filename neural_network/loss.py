@@ -31,3 +31,7 @@ def mse_loss(y_true: np.array, y_pred: np.array) -> float:
     """mse loss function"""
 
     return ((y_true - y_pred) ** 2).mean()
+
+
+def deriv_mse_loss(y_true, y_pred):
+    return (-2) * (y_true - y_pred).mean()

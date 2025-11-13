@@ -2,7 +2,7 @@ import numpy as np
 
 from .activation import sigmoid
 from .layer import Layer
-from .loss import mse_loss
+from .loss import deriv_mse_loss, mse_loss
 
 
 class Network:
@@ -50,8 +50,11 @@ class Network:
     def _split_batch(self, batch_size, x):
         shuffled_x = x.copy()
         np.random.shuffle(shuffled_x)
-        n_batch = max(1, round(x.shape[0] / batch_size))  # Ensure at least 1 batch
+        n_batch = max(1, round(x.shape[0] / batch_size))
         return np.array_split(shuffled_x, n_batch)
+
+    def _deriv_output(self, out_neuron):
+        bias = out_neuron.neurons.bias
 
     def train(self, x, y, epochs, batch_size, learning_rate):
         """Train the network using given training data for a number of epochs."""
@@ -59,4 +62,4 @@ class Network:
         for epoch in range(epochs):
             batches = self._split_batch(batch_size, x)
             for batch in batches:
-                print(batch)
+                pass

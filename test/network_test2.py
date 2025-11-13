@@ -9,6 +9,7 @@ from neural_network.network import Network
 x = np.array([[1, 2], [2, 4], [3, 4]])
 y = np.array([[2]])
 
-net = Network(x, y, 2, 2)
+net = Network(x, y, 3, 2)
 print(net.loss)
 print(net.feedforward(x))
+print(net.output_layer.neurons.bias)
