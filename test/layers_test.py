@@ -7,6 +7,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from neural_network.layer import Layer
 
 layer_1 = Layer(2, 2)
-x = np.array([2, 4])
+x = np.array([[2, 4]])  # Make it 2D for consistency
 
-print(layer_1.feed_forward(x))
+print(layer_1.feed_layer(x))

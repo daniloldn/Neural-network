@@ -58,9 +58,8 @@ class Layer:
         ]
 
         if len(self.neurons) > 1:
-            self.out = np.concatenate((self.output[0], self.output[1]), axis=1)
-            for i in range(len(self.neurons) - 2):
-                self.out = np.concatenate(self.output[i + 2], self.out)
+            # Concatenate all neuron outputs horizontally
+            self.out = np.concatenate(self.output, axis=1)
             return self.out
 
         return self.output[0]

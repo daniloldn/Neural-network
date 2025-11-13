@@ -42,12 +42,11 @@ def test_layer_math_identity():
     l.neurons[1].weights = np.array([[0.0], [1.0]])
     l.neurons[1].bias = 0.0
 
-    x = np.array([2.0, 3.0])
-    out = l.feed_forward(x)
+    x = np.array([[2.0, 3.0]])  # Make it 2D batch format
+    out = l.feed_layer(x)
 
-    # layer returns a list of per-neuron outputs (arrays). Squeeze to scalars.
-    vals = np.array([np.squeeze(o) for o in out])
-    assert np.allclose(vals, np.array([2.0, 3.0]))
+    # layer returns a 2D array; check values
+    assert np.allclose(out, np.array([[2.0, 3.0]]))
 
 
 def test_network_feedforward_row_sum_identity():
