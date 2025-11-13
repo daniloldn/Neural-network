@@ -59,6 +59,8 @@ class Neuron:
     def __init__(
         self, n_inputs: int, id: int, activation: Optional[Callable] = None
     ) -> None:
+        """Initialize a Neuron with given number of inputs, identifier, and activation function."""
+
         self.weights = np.transpose(np.array([np.random.normal(size=n_inputs)]))
         self.bias = np.random.normal()
         self.id = id
@@ -66,7 +68,9 @@ class Neuron:
         self.activation = activation if activation is not None else sigmoid
 
     def feed_forward(self, inputs: Sequence[float]) -> float:
-        # compute weighted sum plus bias and apply activation
+        """Compute the neuron's output for given inputs
+        compute weighted sum plus bias and apply activation."""
+
         x = np.array(inputs)
         z = np.dot(x, self.weights) + self.bias
         return self.activation(z)
