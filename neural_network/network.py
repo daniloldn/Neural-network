@@ -73,6 +73,7 @@ class Network:
                         params_dict[layer_id][neuron_id] = {
                             "weights": neuron.weights,
                             "bias": neuron.bias,
+                            "z": getattr(neuron, "z", None),
                         }
             else:
                 # Handle regular layers (init and output)
@@ -84,14 +85,70 @@ class Network:
                     params_dict[layer_id][neuron_id] = {
                         "weights": neuron.weights,
                         "bias": neuron.bias,
+                        "z": getattr(neuron, "z", None),
                     }
 
         return params_dict
 
     def _backprop(self, x, y_true):
+        """Compute deltas for backpropagation."""
 
-        # collect all the weights and biases for all the neurons in the network
+        # Forward pass to get predictions
+        y_hat = self.feedforward(x)
+
+        # Collect all parameters (including z values)
         params = self._collect_params()
+
+        # Gradient of loss with respect to output
+        dl_dyhat = deriv_mse_loss(y_true, y_hat)
+
+        # Initialize deltas dictionary
+        deltas = {}
+
+        # Calculate output layer delta
+        output_layer_id = self.depth + 1
+        output_layer_key = f"Layer_{output_layer_id}"
+
+        if output_layer_key in params:
+            # Get z values for output layer neurons
+            output_z_values = []
+            for neuron_key in params[output_layer_key]:
+                neuron_z = params[output_layer_key][neuron_key]["z"]
+                output_z_values.append(neuron_z)
+
+            # Convert to array and calculate delta
+            z_array = np.array(output_z_values).flatten()
+            delta_output = dl_dyhat.flatten() * deriv_sigmoid(z_array)
+            deltas[output_layer_key] = delta_output
+
+        # Calculate hidden layer deltas (backward through layers)
+        for layer_id in range(self.depth, 0, -1):
+            layer_key = f"Layer_{layer_id}"
+            next_layer_key = f"Layer_{layer_id + 1}"
+
+            if layer_key in params and next_layer_key in deltas:
+                # Get weights from next layer
+                next_layer_weights = []
+                for neuron_key in params[next_layer_key]:
+                    weights = params[next_layer_key][neuron_key]["weights"]
+                    next_layer_weights.append(weights.flatten())
+
+                # Create weight matrix (each row is a neuron's weights)
+                W_next = np.array(next_layer_weights)
+
+                # Get z values for current layer
+                current_z_values = []
+                for neuron_key in params[layer_key]:
+                    neuron_z = params[layer_key][neuron_key]["z"]
+                    current_z_values.append(neuron_z)
+
+                z_array = np.array(current_z_values).flatten()
+
+                # Calculate delta: W_next.T @ delta_next * sigmoid'(z)
+                delta_current = (
+                    W_next.T @ deltas[next_layer_key] * deriv_sigmoid(z_array)
+                )
+                deltas[layer_key] = delta_current
 
         pass
 

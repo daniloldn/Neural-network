@@ -51,6 +51,7 @@ def test_collect_params_structure_single_layer():
             neuron_params = layer_params[neuron_key]
             assert "weights" in neuron_params, f"{neuron_key} missing weights"
             assert "bias" in neuron_params, f"{neuron_key} missing bias"
+            assert "z" in neuron_params, f"{neuron_key} missing z"
 
 
 def test_collect_params_layer_ids():

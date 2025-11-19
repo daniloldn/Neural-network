@@ -73,4 +73,5 @@ class Neuron:
 
         x = np.array(inputs)
         z = np.dot(x, self.weights) + self.bias
+        self.z = z
         return self.activation(z)
