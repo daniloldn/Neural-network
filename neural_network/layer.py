@@ -48,10 +48,14 @@ class Layer:
     """
 
     def __init__(
-        self, n_inputs: int, n_neurons: int, activation: Optional[Callable] = None
+        self,
+        n_inputs: int,
+        n_neurons: int,
+        id: int,
+        activation: Optional[Callable] = None,
     ):
         """Initialize a Layer with a specified number of neurons and activation function."""
-
+        self.id = id
         self.neurons = [Neuron(n_inputs, i, activation) for i in range(n_neurons)]
 
     def feed_layer(self, inputs):

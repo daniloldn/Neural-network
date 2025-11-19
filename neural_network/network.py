@@ -1,6 +1,7 @@
+import jax
 import numpy as np
 
-from .activation import sigmoid
+from .activation import deriv_sigmoid, sigmoid
 from .layer import Layer
 from .loss import deriv_mse_loss, mse_loss
 
@@ -15,9 +16,11 @@ class Network:
         """Initialize the Network with given architecture and parameters."""
 
         self.depth = depth
-        self.init_layer = Layer((inputs.shape[1]), width, activation)
-        self.hidden_layer = [Layer(width, width, activation) for _ in range(depth - 1)]
-        self.output_layer = Layer(width, 1, activation)
+        self.init_layer = Layer((inputs.shape[1]), width, 1, activation)
+        self.hidden_layer = [
+            Layer(width, width, (i + 2), activation) for i in range(depth - 1)
+        ]
+        self.output_layer = Layer(width, 1, (depth + 1), activation)
         self.network = [self.init_layer, self.hidden_layer, self.output_layer]
 
     def _hidden_recursion(self, x):
@@ -53,8 +56,44 @@ class Network:
         n_batch = max(1, round(x.shape[0] / batch_size))
         return np.array_split(shuffled_x, n_batch)
 
-    def _deriv_output(self, out_neuron):
-        bias = out_neuron.neurons.bias
+    def _collect_params(self):
+        """Function that collects all the weights and biases of every neuron"""
+
+        params_dict = {}
+
+        for layer in self.network:
+            # Handle hidden layer list separately
+            if isinstance(layer, list):
+                for hidden_layer in layer:
+                    layer_id = f"Layer_{hidden_layer.id}"
+                    params_dict[layer_id] = {}
+
+                    for neuron in hidden_layer.neurons:
+                        neuron_id = f"Neuron_{neuron.id}"
+                        params_dict[layer_id][neuron_id] = {
+                            "weights": neuron.weights,
+                            "bias": neuron.bias,
+                        }
+            else:
+                # Handle regular layers (init and output)
+                layer_id = f"Layer_{layer.id}"
+                params_dict[layer_id] = {}
+
+                for neuron in layer.neurons:
+                    neuron_id = f"Neuron_{neuron.id}"
+                    params_dict[layer_id][neuron_id] = {
+                        "weights": neuron.weights,
+                        "bias": neuron.bias,
+                    }
+
+        return params_dict
+
+    def _backprop(self, x, y_true):
+
+        # collect all the weights and biases for all the neurons in the network
+        params = self._collect_params()
+
+        pass
 
     def train(self, x, y, epochs, batch_size, learning_rate):
         """Train the network using given training data for a number of epochs."""

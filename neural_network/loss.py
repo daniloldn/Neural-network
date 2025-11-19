@@ -1,3 +1,4 @@
+import jax
 import numpy as np
 
 
@@ -34,4 +35,6 @@ def mse_loss(y_true: np.array, y_pred: np.array) -> float:
 
 
 def deriv_mse_loss(y_true, y_pred):
-    return (-2) * (y_true - y_pred).mean()
+    """Compute the gradient of MSE loss with respect to predictions (y_pred)."""
+    grad_loss = jax.grad(mse_loss, argnums=1)
+    return grad_loss(y_true, y_pred)
