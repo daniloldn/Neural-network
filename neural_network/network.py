@@ -90,14 +90,8 @@ class Network:
 
         return params_dict
 
-    def _backprop(self, x, y_true):
+    def _backprop(self, params, y_true, y_hat):
         """Compute deltas for backpropagation."""
-
-        # Forward pass to get predictions
-        y_hat = self.feedforward(x)
-
-        # Collect all parameters (including z values)
-        params = self._collect_params()
 
         # Gradient of loss with respect to output
         dl_dyhat = deriv_mse_loss(y_true, y_hat)
@@ -150,7 +144,7 @@ class Network:
                 )
                 deltas[layer_key] = delta_current
 
-        pass
+        return deltas
 
     def train(self, x, y, epochs, batch_size, learning_rate):
         """Train the network using given training data for a number of epochs."""
@@ -158,4 +152,13 @@ class Network:
         for epoch in range(epochs):
             batches = self._split_batch(batch_size, x)
             for batch in batches:
-                pass
+
+                # Forward pass to get predictions
+                y_hat = self.feedforward(x)
+
+                # Collect all parameters (including z values)
+                params = self._collect_params()
+
+                deltas = self._backprop(params, y, y_hat)
+
+        pass
