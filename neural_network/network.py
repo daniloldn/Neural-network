@@ -90,6 +90,14 @@ class Network:
 
         return params_dict
 
+    def _get_z(self, params, layer_key):
+        current_z_values = []
+        for neuron_key in params[layer_key]:
+            neuron_z = params[layer_key][neuron_key]["z"]
+            current_z_values.append(neuron_z)
+
+        return np.array(current_z_values).flatten()
+
     def _backprop(self, params, y_true, y_hat):
         """Compute deltas for backpropagation."""
 
@@ -105,13 +113,8 @@ class Network:
 
         if output_layer_key in params:
             # Get z values for output layer neurons
-            output_z_values = []
-            for neuron_key in params[output_layer_key]:
-                neuron_z = params[output_layer_key][neuron_key]["z"]
-                output_z_values.append(neuron_z)
-
             # Convert to array and calculate delta
-            z_array = np.array(output_z_values).flatten()
+            z_array = self._get_z(params, output_layer_key)
             delta_output = dl_dyhat.flatten() * deriv_sigmoid(z_array)
             deltas[output_layer_key] = delta_output
 
@@ -131,12 +134,8 @@ class Network:
                 W_next = np.array(next_layer_weights)
 
                 # Get z values for current layer
-                current_z_values = []
-                for neuron_key in params[layer_key]:
-                    neuron_z = params[layer_key][neuron_key]["z"]
-                    current_z_values.append(neuron_z)
 
-                z_array = np.array(current_z_values).flatten()
+                z_array = self._get_z(params, layer_key)
 
                 # Calculate delta: W_next.T @ delta_next * sigmoid'(z)
                 delta_current = (
@@ -145,6 +144,86 @@ class Network:
                 deltas[layer_key] = delta_current
 
         return deltas
+
+    def update_values(
+        self, x: np.array, params: dict, deltas: dict, learning_rate: float
+    ) -> dict:
+        """updates parameters: weight and bias"""
+
+        for layers in range(1, (self.depth + 2)):
+            layer_key = f"Layer_{layers}"
+            layer = params[layer_key]
+
+            # first layer
+            if layers == 1:
+                a = x.copy()
+                delta = deltas[layer_key]
+
+                # change values
+                i = 0
+                for neuron_id, neuron in layer.items():
+                    if i < len(delta):  # Safety check
+
+                        # Ensure delta is a scalar
+                        scalar_delta = (
+                            float(delta[i]) if hasattr(delta[i], "item") else delta[i]
+                        )
+
+                        # Calculate gradients: dw = delta * input (outer product)
+                        dw = scalar_delta * a.T  # This gives correct shape
+                        db = scalar_delta
+
+                        # Update parameters - ensure shape compatibility
+                        if dw.shape == neuron["weights"].shape:
+                            neuron["weights"] -= learning_rate * dw
+                        else:
+                            # Reshape dw to match weights shape
+                            dw_reshaped = dw.reshape(neuron["weights"].shape)
+                            neuron["weights"] -= learning_rate * dw_reshaped
+
+                        neuron["bias"] -= learning_rate * db
+
+                    i += 1
+
+            else:
+                # Get activations from previous layer (sigmoid of z values)
+                prev_layer_key = f"Layer_{layers-1}"
+                if prev_layer_key in params:
+                    prev_z = self._get_z(params, prev_layer_key)
+                    a = sigmoid(prev_z).reshape(
+                        1, -1
+                    )  # Ensure proper shape for matrix mult
+                else:
+                    continue  # Skip if previous layer not found
+
+                delta = deltas[layer_key]
+
+                # change values
+                i = 0
+                for neuron_id, neuron in layer.items():
+                    if i < len(delta):  # Safety check
+                        # Ensure delta is a scalar for matrix multiplication
+                        scalar_delta = (
+                            float(delta[i]) if hasattr(delta[i], "item") else delta[i]
+                        )
+
+                        # Calculate gradients with proper shapes
+                        dw = scalar_delta * a  # Broadcasting will handle shapes
+                        db = scalar_delta
+
+                        # Update parameters - ensure shape compatibility
+                        if dw.shape == neuron["weights"].shape:
+                            neuron["weights"] -= learning_rate * dw
+                        else:
+                            # Reshape dw to match weights shape if needed
+                            dw_reshaped = dw.reshape(neuron["weights"].shape)
+                            neuron["weights"] -= learning_rate * dw_reshaped
+
+                        neuron["bias"] -= learning_rate * db
+
+                    i += 1
+
+        return params  # Return after processing all layers
 
     def train(self, x, y, epochs, batch_size, learning_rate):
         """Train the network using given training data for a number of epochs."""
@@ -160,5 +239,9 @@ class Network:
                 params = self._collect_params()
 
                 deltas = self._backprop(params, y, y_hat)
+
+                # update values
+
+                params = self.update_values(x, params, deltas, learning_rate)
 
         pass
