@@ -1,4 +1,4 @@
-def _mini_dashboard(self, epochs, losses):
+def _mini_dashboard(epochs, losses):
     """A compact dashboard view"""
     print(f"\n╔{'═' * 68}╗")
     print(f"║{'NEURAL NETWORK TRAINING DASHBOARD':^68}║")
@@ -61,7 +61,7 @@ def _mini_dashboard(self, epochs, losses):
     print("(Lower is better) ▁▂▃▄▅▆▇█ (Higher is worse)")
 
 
-def _simple_terminal_graph(self, epochs, losses, width=60, height=15):
+def _simple_terminal_graph(epochs, losses, width=60, height=15):
     """Create a simple ASCII graph in the terminal"""
     print(f"\n{'='*70}")
     print("TRAINING LOSS GRAPH")
@@ -117,7 +117,7 @@ def _simple_terminal_graph(self, epochs, losses, width=60, height=15):
     print(f"{'':15}Epochs")
 
 
-def _loss_table_view(self, epochs, losses):
+def _loss_table_view(epochs, losses):
     """Show loss data in a clean table format"""
     print(f"\n{'='*50}")
     print("TRAINING PROGRESS TABLE")
