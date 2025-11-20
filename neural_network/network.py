@@ -225,6 +225,34 @@ class Network:
 
         return params  # Return after processing all layers
 
+    def _update_params(self, params):
+        """Update network parameters from params dictionary"""
+        for layer in self.network:
+            # Handle hidden layer list separately
+            if isinstance(layer, list):
+                for hidden_layer in layer:
+                    layer_key = f"Layer_{hidden_layer.id}"
+                    if layer_key in params:
+                        for neuron in hidden_layer.neurons:
+                            neuron_key = f"Neuron_{neuron.id}"
+                            if neuron_key in params[layer_key]:
+                                neuron.weights = params[layer_key][neuron_key][
+                                    "weights"
+                                ]
+                                neuron.bias = params[layer_key][neuron_key]["bias"]
+
+            else:
+                # Handle regular layers (init and output)
+                layer_key = f"Layer_{layer.id}"
+                if layer_key in params:
+                    for neuron in layer.neurons:
+                        neuron_key = f"Neuron_{neuron.id}"
+                        if neuron_key in params[layer_key]:
+                            neuron.weights = params[layer_key][neuron_key]["weights"]
+                            neuron.bias = params[layer_key][neuron_key]["bias"]
+
+        return None
+
     def train(self, x, y, epochs, batch_size, learning_rate):
         """Train the network using given training data for a number of epochs."""
 
@@ -244,4 +272,9 @@ class Network:
 
                 params = self.update_values(x, params, deltas, learning_rate)
 
-        pass
+                self._update_params(params)
+
+            print(self._compute_loss(y, y_hat))
+            continue
+
+        return None
