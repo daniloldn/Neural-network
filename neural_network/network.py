@@ -1,4 +1,4 @@
-import jax
+import matplotlib.pyplot as plt
 import numpy as np
 
 from .activation import deriv_sigmoid, sigmoid
@@ -15,6 +15,7 @@ class Network:
     def __init__(self, inputs, depth, width, activation=sigmoid):
         """Initialize the Network with given architecture and parameters."""
 
+        self.inputs = inputs
         self.depth = depth
         self.init_layer = Layer((inputs.shape[1]), width, 1, activation)
         self.hidden_layer = [
@@ -103,6 +104,7 @@ class Network:
 
         # Gradient of loss with respect to output
         dl_dyhat = deriv_mse_loss(y_true, y_hat)
+        batch_size = y_true.shape[0]
 
         # Initialize deltas dictionary
         deltas = {}
@@ -113,9 +115,11 @@ class Network:
 
         if output_layer_key in params:
             # Get z values for output layer neurons
-            # Convert to array and calculate delta
             z_array = self._get_z(params, output_layer_key)
-            delta_output = dl_dyhat.flatten() * deriv_sigmoid(z_array)
+            # Ensure shapes match for element-wise multiplication
+            if dl_dyhat.shape != z_array.shape:
+                dl_dyhat = dl_dyhat.reshape(z_array.shape)
+            delta_output = dl_dyhat * deriv_sigmoid(z_array)
             deltas[output_layer_key] = delta_output
 
         # Calculate hidden layer deltas (backward through layers)
@@ -133,14 +137,35 @@ class Network:
                 # Create weight matrix (each row is a neuron's weights)
                 W_next = np.array(next_layer_weights)
 
-                # Get z values for current layer
-
+                # Get z values and deltas for current layer
                 z_array = self._get_z(params, layer_key)
+                next_deltas = deltas[next_layer_key]
 
-                # Calculate delta: W_next.T @ delta_next * sigmoid'(z)
-                delta_current = (
-                    W_next.T @ deltas[next_layer_key] * deriv_sigmoid(z_array)
+                # Get number of neurons in current and next layers
+                current_layer_neurons = len(params[layer_key])
+                next_layer_neurons = len(params[next_layer_key])
+
+                # Reshape z_array to (batch_size, current_layer_neurons)
+                z_reshaped = z_array.reshape(batch_size, current_layer_neurons)
+
+                # Reshape next_deltas to (batch_size, next_layer_neurons)
+                if len(next_deltas.shape) == 1:
+                    next_deltas_reshaped = next_deltas.reshape(
+                        batch_size, next_layer_neurons
+                    )
+                else:
+                    next_deltas_reshaped = next_deltas
+
+                # Calculate delta: delta_next @ W_next * sigmoid'(z)
+                # Shape: (batch_size, next_layer_neurons) @ (next_layer_neurons, current_layer_neurons)
+                #      = (batch_size, current_layer_neurons)
+                delta_current = (next_deltas_reshaped @ W_next) * deriv_sigmoid(
+                    z_reshaped
                 )
+
+                # Flatten back to the expected format
+                delta_current = delta_current.flatten()
+
                 deltas[layer_key] = delta_current
 
         return deltas
@@ -150,38 +175,35 @@ class Network:
     ) -> dict:
         """updates parameters: weight and bias"""
 
+        batch_size = x.shape[0]
+
         for layers in range(1, (self.depth + 2)):
             layer_key = f"Layer_{layers}"
             layer = params[layer_key]
 
             # first layer
             if layers == 1:
-                a = x.copy()
-                delta = deltas[layer_key]
+                a = x.copy()  # Shape: (batch_size, input_features)
+                delta = deltas[layer_key]  # Shape: (batch_size * num_neurons,)
+
+                # Reshape deltas to (batch_size, num_neurons)
+                num_neurons = len(layer)
+                delta_reshaped = delta.reshape(batch_size, num_neurons)
 
                 # change values
                 i = 0
                 for neuron_id, neuron in layer.items():
-                    if i < len(delta):  # Safety check
+                    # Get deltas for this specific neuron across all batch samples
+                    neuron_deltas = delta_reshaped[:, i]  # Shape: (batch_size,)
 
-                        # Ensure delta is a scalar
-                        scalar_delta = (
-                            float(delta[i]) if hasattr(delta[i], "item") else delta[i]
-                        )
+                    # Calculate gradients averaged over the batch
+                    # dw = (1/batch_size) * sum(delta_i * x_i) for each sample i
+                    dw = (neuron_deltas.reshape(-1, 1) * a).mean(axis=0).reshape(-1, 1)
+                    db = neuron_deltas.mean()  # Average bias gradient
 
-                        # Calculate gradients: dw = delta * input (outer product)
-                        dw = scalar_delta * a.T  # This gives correct shape
-                        db = scalar_delta
-
-                        # Update parameters - ensure shape compatibility
-                        if dw.shape == neuron["weights"].shape:
-                            neuron["weights"] -= learning_rate * dw
-                        else:
-                            # Reshape dw to match weights shape
-                            dw_reshaped = dw.reshape(neuron["weights"].shape)
-                            neuron["weights"] -= learning_rate * dw_reshaped
-
-                        neuron["bias"] -= learning_rate * db
+                    # Update parameters
+                    neuron["weights"] -= learning_rate * dw
+                    neuron["bias"] -= learning_rate * db
 
                     i += 1
 
@@ -190,36 +212,35 @@ class Network:
                 prev_layer_key = f"Layer_{layers-1}"
                 if prev_layer_key in params:
                     prev_z = self._get_z(params, prev_layer_key)
-                    a = sigmoid(prev_z).reshape(
-                        1, -1
-                    )  # Ensure proper shape for matrix mult
+                    # Reshape to (batch_size, num_prev_neurons)
+                    prev_neurons_count = len(params[prev_layer_key])
+                    prev_z_reshaped = prev_z.reshape(batch_size, prev_neurons_count)
+                    a = sigmoid(
+                        prev_z_reshaped
+                    )  # Shape: (batch_size, num_prev_neurons)
                 else:
                     continue  # Skip if previous layer not found
 
-                delta = deltas[layer_key]
+                delta = deltas[layer_key]  # Shape: (batch_size * num_neurons,)
+
+                # Reshape deltas to (batch_size, num_neurons)
+                num_neurons = len(layer)
+                delta_reshaped = delta.reshape(batch_size, num_neurons)
 
                 # change values
                 i = 0
                 for neuron_id, neuron in layer.items():
-                    if i < len(delta):  # Safety check
-                        # Ensure delta is a scalar for matrix multiplication
-                        scalar_delta = (
-                            float(delta[i]) if hasattr(delta[i], "item") else delta[i]
-                        )
+                    # Get deltas for this specific neuron across all batch samples
+                    neuron_deltas = delta_reshaped[:, i]  # Shape: (batch_size,)
 
-                        # Calculate gradients with proper shapes
-                        dw = scalar_delta * a  # Broadcasting will handle shapes
-                        db = scalar_delta
+                    # Calculate gradients averaged over the batch
+                    # dw = (1/batch_size) * sum(delta_i * a_i) for each sample i
+                    dw = (neuron_deltas.reshape(-1, 1) * a).mean(axis=0).reshape(-1, 1)
+                    db = neuron_deltas.mean()  # Average bias gradient
 
-                        # Update parameters - ensure shape compatibility
-                        if dw.shape == neuron["weights"].shape:
-                            neuron["weights"] -= learning_rate * dw
-                        else:
-                            # Reshape dw to match weights shape if needed
-                            dw_reshaped = dw.reshape(neuron["weights"].shape)
-                            neuron["weights"] -= learning_rate * dw_reshaped
-
-                        neuron["bias"] -= learning_rate * db
+                    # Update parameters
+                    neuron["weights"] -= learning_rate * dw
+                    neuron["bias"] -= learning_rate * db
 
                     i += 1
 
@@ -253,13 +274,192 @@ class Network:
 
         return None
 
+    def _plot_loss(self, loss_dict):
+        """Display training loss visualization in terminal"""
+        if not loss_dict:
+            print("No loss data to display")
+            return
+
+        epochs = list(loss_dict.keys())
+        losses = list(loss_dict.values())
+
+        self._mini_dashboard(epochs, losses)
+        self._simple_terminal_graph(epochs, losses)
+        self._loss_table_view(epochs, losses)
+
+    def _mini_dashboard(self, epochs, losses):
+        """A compact dashboard view"""
+        print(f"\n╔{'═' * 68}╗")
+        print(f"║{'NEURAL NETWORK TRAINING DASHBOARD':^68}║")
+        print(f"╚{'═' * 68}╝")
+
+        if not losses:
+            print("No training data available")
+            return
+
+        # Quick stats in a box
+        initial = losses[0]
+        final = losses[-1]
+        improvement = initial - final
+        improvement_pct = (improvement / initial * 100) if initial != 0 else 0
+        best = min(losses)
+
+        # Status determination
+        if improvement_pct > 30:
+            status = "🚀 EXCELLENT"
+            status_color = "🟢"
+        elif improvement_pct > 10:
+            status = "✅ GOOD"
+            status_color = "🟡"
+        elif improvement_pct > 0:
+            status = "📈 IMPROVING"
+            status_color = "🟠"
+        else:
+            status = "⚠️  NO PROGRESS"
+            status_color = "🔴"
+
+        print(f"┌─────────────────┬──────────────┬─────────────┬──────────────┐")
+        print(
+            f"│ Epochs: {len(epochs):>7} │ Initial: {initial:>8.4f} │ Final: {final:>8.4f} │ Best: {best:>9.4f} │"
+        )
+        print(f"├─────────────────┼──────────────┼─────────────┼──────────────┤")
+        print(
+            f"│ Status: {status:<7} │ Improvement: {improvement_pct:>6.1f}% │ Change: {improvement:>7.4f} │ {status_color} │"
+        )
+        print(f"└─────────────────┴──────────────┴─────────────┴──────────────┘")
+
+        # Mini sparkline
+        print(f"\nLoss Trend: ", end="")
+        chars = "▁▂▃▄▅▆▇█"
+        if len(losses) > 1:
+            min_loss = min(losses)
+            max_loss = max(losses)
+            loss_range = max_loss - min_loss if max_loss != min_loss else 1
+
+            # Sample points if too many
+            sample_size = min(50, len(losses))
+            step = len(losses) // sample_size if len(losses) > sample_size else 1
+            sampled = [losses[i] for i in range(0, len(losses), max(1, step))]
+
+            for loss in sampled[:50]:  # Max 50 characters
+                normalized = (loss - min_loss) / loss_range if loss_range > 0 else 0
+                char_idx = min(len(chars) - 1, int(normalized * (len(chars) - 1)))
+                print(chars[char_idx], end="")
+
+        print(f" ({len(epochs)} epochs)")
+        print("(Lower is better) ▁▂▃▄▅▆▇█ (Higher is worse)")
+
+    def _simple_terminal_graph(self, epochs, losses, width=60, height=15):
+        """Create a simple ASCII graph in the terminal"""
+        print(f"\n{'='*70}")
+        print("TRAINING LOSS GRAPH")
+        print(f"{'='*70}")
+
+        if not losses or len(losses) == 0:
+            print("No loss data to display")
+            return
+
+        # Basic stats
+        min_loss = min(losses)
+        max_loss = max(losses)
+        loss_range = max_loss - min_loss if max_loss != min_loss else 1
+
+        print(f"Epochs: {len(epochs)}")
+        print(f"Initial Loss: {losses[0]:.6f}")
+        print(f"Final Loss:   {losses[-1]:.6f}")
+        print(f"Best Loss:    {min_loss:.6f}")
+        print(f"Improvement:  {((losses[0] - losses[-1]) / losses[0] * 100):+.1f}%")
+        print()
+
+        # Create the graph
+        for row in range(height):
+            # Calculate loss value for this row (top = high loss, bottom = low loss)
+            row_loss = max_loss - (row * loss_range / (height - 1))
+
+            # Print y-axis label
+            print(f"{row_loss:8.4f} │", end="")
+
+            # Plot points
+            for col in range(width):
+                if col < len(losses):
+                    loss_val = losses[col] if col < len(losses) else losses[-1]
+
+                    # Calculate where this loss should appear vertically
+                    normalized_pos = (max_loss - loss_val) / loss_range * (height - 1)
+
+                    # If this loss value is close to current row, plot it
+                    if abs(normalized_pos - row) < 0.7:
+                        print("*", end="")
+                    elif abs(normalized_pos - row) < 1.0:
+                        print(".", end="")
+                    else:
+                        print(" ", end="")
+                else:
+                    print(" ", end="")
+
+            print("│")
+
+        # Print x-axis
+        print(f"{'':9}└{'─' * width}┘")
+        print(f"{'':10}0{'':<{width-10}}{len(epochs)-1}")
+        print(f"{'':15}Epochs")
+
+    def _loss_table_view(self, epochs, losses):
+        """Show loss data in a clean table format"""
+        print(f"\n{'='*50}")
+        print("TRAINING PROGRESS TABLE")
+        print(f"{'='*50}")
+        print(f"{'Epoch':<8} {'Loss':<12} {'Change':<10} {'% Change':<10}")
+        print("-" * 50)
+
+        # Show every 5th epoch if many epochs, otherwise show all
+        step = max(1, len(epochs) // 20)
+
+        for i in range(0, len(epochs), step):
+            epoch = epochs[i]
+            loss = losses[i]
+
+            if i == 0:
+                change = 0.0
+                pct_change = 0.0
+            else:
+                prev_i = max(0, i - step)
+                change = loss - losses[prev_i]
+                pct_change = (
+                    (change / losses[prev_i] * 100) if losses[prev_i] != 0 else 0
+                )
+
+            # Color coding with symbols
+            if i == 0:
+                symbol = "🔴"  # Start
+            elif change < -0.001:
+                symbol = "🟢"  # Good decrease
+            elif change < 0:
+                symbol = "🟡"  # Small decrease
+            else:
+                symbol = "🟠"  # Increase or no change
+
+            print(
+                f"{epoch:<8} {loss:<12.6f} {change:+10.6f} {pct_change:+10.2f}% {symbol}"
+            )
+
+        # Final summary
+        print("-" * 50)
+        final_change = losses[-1] - losses[0]
+        final_pct = (final_change / losses[0] * 100) if losses[0] != 0 else 0
+        print(
+            f"{'TOTAL':<8} {losses[-1]:<12.6f} {final_change:+10.6f} {final_pct:+10.2f}%"
+        )
+
     def train(self, x, y, epochs, batch_size, learning_rate):
         """Train the network using given training data for a number of epochs."""
 
+        loss_cal = {}
+
         for epoch in range(epochs):
             batches = self._split_batch(batch_size, x)
+            print(f"starting epoch: {epoch}")
             for batch in batches:
-
                 # Forward pass to get predictions
                 y_hat = self.feedforward(x)
 
@@ -274,7 +474,9 @@ class Network:
 
                 self._update_params(params)
 
-            print(self._compute_loss(y, y_hat))
+            if epoch not in loss_cal:
+                loss_cal[f"{epoch}"] = self._compute_loss(y, y_hat)
             continue
 
+        self._plot_loss(loss_cal)
         return None
