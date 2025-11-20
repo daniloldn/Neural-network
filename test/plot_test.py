@@ -9,15 +9,17 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from neural_network.network import Network
 
+# %%
+
 # Create dummy data with 100 observations and 5 input features
 np.random.seed(42)  # For reproducible results
 x = np.random.randn(100, 5)  # 100 observations, 5 features
 y = np.random.randn(100, 1)  # 100 target values (single output)
 
-net = Network(x, 3, 5)
+net = Network(x, 2, 4)
 
 
-train = net.train(x, y, 100, 20, 0.02)
+train = net.train(x, y, 200, 20, 0.01)
 
 
 # %%
