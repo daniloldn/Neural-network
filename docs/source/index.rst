@@ -98,18 +98,17 @@ The training pipeline implements:
 Installation & Dependencies
 ---------------------------
 
-Install the package and its dependencies:
+Install the package from PyPI:
 
 .. code-block:: bash
 
    # Core installation
-   pip install -e .
+   pip install mynet
 
-   # With development tools
+   # For development (clone repo first)
+   git clone <repository-url>
+   cd Neural_network
    pip install -e ".[dev]"
-
-   # With testing suite
-   pip install -e ".[test]"
 
 Dependencies:
    * NumPy ≥1.23 (numerical computations)
