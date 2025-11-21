@@ -6,3 +6,4 @@ __pycache__/
 copilot-instructions.md
 .github/
 *.egg-info/
+dist/

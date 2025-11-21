@@ -1,0 +1,392 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contributing &mdash; Neural Network 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="Examples" href="examples.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Neural Network
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#development-setup">Development Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#project-structure">Project Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#development-guidelines">Development Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#areas-for-contribution">Areas for Contribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#code-review-checklist">Code Review Checklist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-development-tasks">Common Development Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#debugging-tips">Debugging Tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-help">Getting Help</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Neural Network</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Contributing</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/daniloldn/Neural-network/blob/main/docs/source/contributing.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="contributing">
+<h1>Contributing<a class="headerlink" href="#contributing" title="Link to this heading"></a></h1>
+<p>We welcome contributions to the neural network project! This guide will help you get started
+with development, testing, and contributing improvements.</p>
+<section id="development-setup">
+<h2>Development Setup<a class="headerlink" href="#development-setup" title="Link to this heading"></a></h2>
+<ol class="arabic">
+<li><p><strong>Clone the Repository</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/daniloldn/Neural-network.git
+<span class="nb">cd</span><span class="w"> </span>Neural-network
+</pre></div>
+</div>
+</li>
+<li><p><strong>Set Up Development Environment</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create virtual environment</span>
+python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>vneural
+<span class="nb">source</span><span class="w"> </span>vneural/bin/activate<span class="w">  </span><span class="c1"># On Windows: vneural\Scripts\activate</span>
+
+<span class="c1"># Install in development mode with all dependencies</span>
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev,test,viz]&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Verify Installation</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run basic tests</span>
+pytest<span class="w"> </span>test/<span class="w"> </span>-v
+
+<span class="c1"># Run deployment tests</span>
+python<span class="w"> </span>test/deployment_tests_simple.py
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="project-structure">
+<h2>Project Structure<a class="headerlink" href="#project-structure" title="Link to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Neural-network/
+├── neural_network/          # Main package
+│   ├── __init__.py
+│   ├── activation.py        # Activation functions
+│   ├── layer.py             # Layer implementation
+│   ├── loss.py              # Loss functions with JAX
+│   ├── network.py           # Main Network class
+│   └── neuron.py            # Individual neuron logic
+├── test/                    # Test suite
+│   ├── deployment_tests_simple.py
+│   ├── terminal_vis.py
+│   └── various test files
+├── docs/                    # Documentation
+└── pyproject.toml           # Project configuration
+</pre></div>
+</div>
+</section>
+<section id="development-guidelines">
+<h2>Development Guidelines<a class="headerlink" href="#development-guidelines" title="Link to this heading"></a></h2>
+<p><strong>Code Style</strong></p>
+<p>We use several tools to maintain code quality:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Format code</span>
+black<span class="w"> </span>neural_network/<span class="w"> </span>test/
+
+<span class="c1"># Sort imports</span>
+isort<span class="w"> </span>neural_network/<span class="w"> </span>test/
+
+<span class="c1"># Lint code</span>
+flake8<span class="w"> </span>neural_network/<span class="w"> </span>test/
+
+<span class="c1"># Type checking</span>
+mypy<span class="w"> </span>neural_network/
+</pre></div>
+</div>
+<p><strong>Git Workflow</strong></p>
+<ol class="arabic simple">
+<li><p>Create a feature branch: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">checkout</span> <span class="pre">-b</span> <span class="pre">feature/your-feature-name</span></code></p></li>
+<li><p>Make your changes</p></li>
+<li><p>Run tests: <code class="docutils literal notranslate"><span class="pre">pytest</span> <span class="pre">test/</span></code></p></li>
+<li><p>Format code: <code class="docutils literal notranslate"><span class="pre">black</span> <span class="pre">.</span> <span class="pre">&amp;&amp;</span> <span class="pre">isort</span> <span class="pre">.</span></code></p></li>
+<li><p>Commit changes: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span> <span class="pre">-m</span> <span class="pre">&quot;Add:</span> <span class="pre">description</span> <span class="pre">of</span> <span class="pre">changes&quot;</span></code></p></li>
+<li><p>Push branch: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">origin</span> <span class="pre">feature/your-feature-name</span></code></p></li>
+<li><p>Open a pull request</p></li>
+</ol>
+</section>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Link to this heading"></a></h2>
+<p><strong>Running Tests</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run all tests</span>
+pytest<span class="w"> </span>test/<span class="w"> </span>-v
+
+<span class="c1"># Run specific test file</span>
+pytest<span class="w"> </span>test/network_test.py<span class="w"> </span>-v
+
+<span class="c1"># Run tests with coverage</span>
+pytest<span class="w"> </span>test/<span class="w"> </span>--cov<span class="o">=</span>neural_network<span class="w"> </span>--cov-report<span class="o">=</span>html
+</pre></div>
+</div>
+<p><strong>Test Categories</strong></p>
+<ul class="simple">
+<li><p><strong>Unit Tests</strong>: Test individual components (neurons, layers, functions)</p></li>
+<li><p><strong>Integration Tests</strong>: Test component interactions</p></li>
+<li><p><strong>Deployment Tests</strong>: Test on realistic data patterns</p></li>
+<li><p><strong>Mathematical Tests</strong>: Verify gradient computations and loss calculations</p></li>
+</ul>
+<p><strong>Writing New Tests</strong></p>
+<p>Follow the existing test patterns:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neural_network</span><span class="w"> </span><span class="kn">import</span> <span class="n">Network</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_network_creation</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test basic network creation.&quot;&quot;&quot;</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">net</span><span class="o">.</span><span class="n">depth</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">net</span><span class="o">.</span><span class="n">init_layer</span><span class="o">.</span><span class="n">neurons</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_feedforward_shape</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test that feedforward returns correct shape.&quot;&quot;&quot;</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">feedforward</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">output</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="areas-for-contribution">
+<h2>Areas for Contribution<a class="headerlink" href="#areas-for-contribution" title="Link to this heading"></a></h2>
+<p><strong>High Priority</strong></p>
+<ul class="simple">
+<li><p><strong>Performance Optimization</strong>: Improve training speed and convergence</p></li>
+<li><p><strong>Additional Activations</strong>: ReLU, tanh, leaky ReLU implementations</p></li>
+<li><p><strong>Advanced Optimizers</strong>: Adam, RMSprop, momentum-based optimizers</p></li>
+<li><p><strong>Regularization</strong>: L1/L2 regularization, dropout implementation</p></li>
+<li><p><strong>GPU Support</strong>: CUDA acceleration through JAX</p></li>
+</ul>
+<p><strong>Medium Priority</strong></p>
+<ul class="simple">
+<li><p><strong>Network Architectures</strong>: Convolutional layers, LSTM/RNN support</p></li>
+<li><p><strong>Loss Functions</strong>: Cross-entropy, custom loss function support</p></li>
+<li><p><strong>Visualization</strong>: Enhanced plotting, network architecture diagrams</p></li>
+<li><p><strong>Data Handling</strong>: Built-in data preprocessing, normalization utilities</p></li>
+<li><p><strong>Serialization</strong>: Save/load trained models</p></li>
+</ul>
+<p><strong>Documentation &amp; Examples</strong></p>
+<ul class="simple">
+<li><p><strong>Tutorials</strong>: Step-by-step guides for common use cases</p></li>
+<li><p><strong>API Documentation</strong>: Improved docstrings and examples</p></li>
+<li><p><strong>Mathematical Background</strong>: Theory explanations and derivations</p></li>
+<li><p><strong>Performance Benchmarks</strong>: Comparison with other frameworks</p></li>
+</ul>
+</section>
+<section id="code-review-checklist">
+<h2>Code Review Checklist<a class="headerlink" href="#code-review-checklist" title="Link to this heading"></a></h2>
+<p>Before submitting a pull request, ensure:</p>
+<dl class="simple">
+<dt><strong>Functionality</strong></dt><dd><p>☐ Code runs without errors
+☐ New features work as intended
+☐ Existing functionality is not broken
+☐ Edge cases are handled appropriately</p>
+</dd>
+<dt><strong>Testing</strong></dt><dd><p>☐ New code has corresponding tests
+☐ All tests pass locally
+☐ Test coverage is maintained or improved
+☐ Tests are meaningful and thorough</p>
+</dd>
+<dt><strong>Code Quality</strong></dt><dd><p>☐ Code follows project style (black, isort)
+☐ No lint warnings (flake8)
+☐ Type hints are present (mypy)
+☐ Docstrings follow NumPy/Google style</p>
+</dd>
+<dt><strong>Documentation</strong></dt><dd><p>☐ Public functions have docstrings
+☐ Complex logic is commented
+☐ README/docs updated if needed
+☐ Examples work as written</p>
+</dd>
+</dl>
+</section>
+<section id="common-development-tasks">
+<h2>Common Development Tasks<a class="headerlink" href="#common-development-tasks" title="Link to this heading"></a></h2>
+<p><strong>Adding a New Activation Function</strong></p>
+<ol class="arabic">
+<li><p>Add function to <code class="docutils literal notranslate"><span class="pre">neural_network/activation.py</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">relu</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;ReLU activation function.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">deriv_relu</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Derivative of ReLU.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>Update imports and usage in relevant files</p></li>
+<li><p>Add tests in <code class="docutils literal notranslate"><span class="pre">test/activation_test.py</span></code></p></li>
+<li><p>Update documentation</p></li>
+</ol>
+<p><strong>Adding a New Optimizer</strong></p>
+<ol class="arabic simple">
+<li><p>Create <code class="docutils literal notranslate"><span class="pre">neural_network/optimizers.py</span></code></p></li>
+<li><p>Implement optimizer class with <code class="docutils literal notranslate"><span class="pre">update</span></code> method</p></li>
+<li><p>Integrate into <code class="docutils literal notranslate"><span class="pre">Network.train()</span></code> method</p></li>
+<li><p>Add comprehensive tests</p></li>
+<li><p>Update documentation and examples</p></li>
+</ol>
+<p><strong>Performance Profiling</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Profile training performance</span>
+python<span class="w"> </span>-m<span class="w"> </span>cProfile<span class="w"> </span>-o<span class="w"> </span>profile_output.prof<span class="w"> </span>test/deployment_tests_simple.py
+
+<span class="c1"># Analyze results</span>
+python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
+<span class="s2">import pstats</span>
+<span class="s2">p = pstats.Stats(&#39;profile_output.prof&#39;)</span>
+<span class="s2">p.sort_stats(&#39;cumulative&#39;).print_stats(20)</span>
+<span class="s2">&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="debugging-tips">
+<h2>Debugging Tips<a class="headerlink" href="#debugging-tips" title="Link to this heading"></a></h2>
+<p><strong>Common Issues</strong></p>
+<ul class="simple">
+<li><p><strong>Import Errors</strong>: Ensure you’re using <code class="docutils literal notranslate"><span class="pre">sys.path.insert(0,</span> <span class="pre">...)</span></code> in test files</p></li>
+<li><p><strong>Shape Mismatches</strong>: Check array dimensions in forward/backward passes</p></li>
+<li><p><strong>Slow Convergence</strong>: Verify gradient calculations and learning rates</p></li>
+<li><p><strong>Memory Issues</strong>: Use smaller batch sizes or reduce network complexity</p></li>
+</ul>
+<p><strong>Debugging Tools</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check gradients numerically</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neural_network.loss</span><span class="w"> </span><span class="kn">import</span> <span class="n">mse_loss</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">check_gradients</span><span class="p">(</span><span class="n">net</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify gradient calculations.&quot;&quot;&quot;</span>
+    <span class="n">grad_fn</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="k">lambda</span> <span class="n">params</span><span class="p">:</span> <span class="n">mse_loss</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">net</span><span class="o">.</span><span class="n">feedforward</span><span class="p">(</span><span class="n">X</span><span class="p">)))</span>
+    <span class="c1"># Compare with numerical gradients</span>
+
+<span class="c1"># Monitor training progress</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_training_history</span><span class="p">(</span><span class="n">losses</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Plot loss over time.&quot;&quot;&quot;</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">losses</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Training Loss&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Epoch&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Loss&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="getting-help">
+<h2>Getting Help<a class="headerlink" href="#getting-help" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>GitHub Issues</strong>: Report bugs or request features</p></li>
+<li><p><strong>Documentation</strong>: Check examples and API reference</p></li>
+<li><p><strong>Code Comments</strong>: Most functions have detailed explanations</p></li>
+<li><p><strong>Test Files</strong>: See test/ directory for usage examples</p></li>
+</ul>
+<p><strong>Before Opening an Issue</strong></p>
+<ol class="arabic simple">
+<li><p>Check existing issues for duplicates</p></li>
+<li><p>Provide minimal reproducible example</p></li>
+<li><p>Include error messages and tracebacks</p></li>
+<li><p>Specify your environment (OS, Python version, dependencies)</p></li>
+</ol>
+<p>Thank you for contributing to the neural network project! Your improvements help
+make this educational tool better for everyone.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="examples.html" class="btn btn-neutral float-left" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Danilo Carneiro de Souza.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

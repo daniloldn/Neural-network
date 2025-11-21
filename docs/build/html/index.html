@@ -1,0 +1,318 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neural Network Documentation &mdash; Neural Network 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples" href="examples.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            Neural Network
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Neural Network</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Neural Network Documentation</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/daniloldn/Neural-network/blob/main/docs/source/index.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="neural-network-documentation">
+<h1>Neural Network Documentation<a class="headerlink" href="#neural-network-documentation" title="Link to this heading"></a></h1>
+<p>A custom neural network implementation built from scratch with JAX-based automatic differentiation,
+comprehensive terminal-based visualization, and modular architecture for educational and research purposes.</p>
+<a class="reference external image-reference" href="https://www.python.org/downloads/"><img alt="Python Version" src="https://img.shields.io/badge/python-3.10%2B-blue.svg" />
+</a>
+<img alt="License" src="https://img.shields.io/badge/license-MIT-green.svg" />
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>This neural network implementation provides:</p>
+<ul class="simple">
+<li><p><strong>Modular Architecture</strong>: Clear separation between neurons, layers, and networks</p></li>
+<li><p><strong>JAX Integration</strong>: Automatic differentiation for gradient computation</p></li>
+<li><p><strong>Terminal Visualization</strong>: Beautiful ASCII-based training progress monitoring</p></li>
+<li><p><strong>Educational Focus</strong>: Well-documented code for learning neural network internals</p></li>
+<li><p><strong>Flexible Configuration</strong>: Support for various architectures and hyperparameters</p></li>
+</ul>
+</section>
+<section id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">neural_network</span><span class="w"> </span><span class="kn">import</span> <span class="n">Network</span>
+
+<span class="c1"># Generate sample data</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  <span class="c1"># 100 samples, 3 features</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Simple sum target</span>
+
+<span class="c1"># Create and train network</span>
+<span class="n">net</span> <span class="o">=</span> <span class="n">Network</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">net</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="c1"># Make predictions</span>
+<span class="n">predictions</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">feedforward</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="key-features">
+<h2>Key Features<a class="headerlink" href="#key-features" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>🧠 <strong>Modular Design</strong></dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Neuron</span></code>: Individual processing units with weights and biases</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Layer</span></code>: Collections of neurons with coordinated forward propagation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Network</span></code>: Complete neural network with training capabilities</p></li>
+</ul>
+</dd>
+<dt>📊 <strong>Advanced Visualization</strong></dt><dd><ul class="simple">
+<li><p>Real-time terminal dashboard with training metrics</p></li>
+<li><p>ASCII loss curves and progress tracking</p></li>
+<li><p>No external GUI dependencies required</p></li>
+</ul>
+</dd>
+<dt>🔬 <strong>Educational Value</strong></dt><dd><ul class="simple">
+<li><p>Clear implementation of backpropagation algorithm</p></li>
+<li><p>Well-documented mathematical operations</p></li>
+<li><p>Comprehensive test suite with various data patterns</p></li>
+</ul>
+</dd>
+<dt>⚙️ <strong>Technical Highlights</strong></dt><dd><ul class="simple">
+<li><p>JAX-based automatic differentiation</p></li>
+<li><p>Batch processing with proper gradient averaging</p></li>
+<li><p>Flexible activation functions (sigmoid with derivatives)</p></li>
+<li><p>MSE loss with custom derivative computation</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="architecture-overview">
+<h2>Architecture Overview<a class="headerlink" href="#architecture-overview" title="Link to this heading"></a></h2>
+<p>The neural network follows a hierarchical structure:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Network
+├── Initial Layer (input → first hidden)
+├── Hidden Layers (configurable depth)
+└── Output Layer (final hidden → output)
+</pre></div>
+</div>
+<p>Each layer contains multiple neurons that:</p>
+<ol class="arabic simple">
+<li><p>Receive weighted inputs</p></li>
+<li><p>Apply activation function (sigmoid)</p></li>
+<li><p>Pass outputs to next layer</p></li>
+<li><p>Update weights via backpropagation</p></li>
+</ol>
+</section>
+<section id="training-process">
+<h2>Training Process<a class="headerlink" href="#training-process" title="Link to this heading"></a></h2>
+<p>The training pipeline implements:</p>
+<ol class="arabic simple">
+<li><p><strong>Forward Pass</strong>: Data flows through network layers</p></li>
+<li><p><strong>Loss Calculation</strong>: MSE between predictions and targets</p></li>
+<li><p><strong>Backward Pass</strong>: Gradients computed via JAX autodiff</p></li>
+<li><p><strong>Parameter Update</strong>: Weights and biases adjusted</p></li>
+<li><p><strong>Visualization</strong>: Progress displayed in terminal</p></li>
+</ol>
+</section>
+<section id="installation-dependencies">
+<h2>Installation &amp; Dependencies<a class="headerlink" href="#installation-dependencies" title="Link to this heading"></a></h2>
+<p>Install the package and its dependencies:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Core installation</span>
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+
+<span class="c1"># With development tools</span>
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
+
+<span class="c1"># With testing suite</span>
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[test]&quot;</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Dependencies:</dt><dd><ul class="simple">
+<li><p>NumPy ≥1.23 (numerical computations)</p></li>
+<li><p>JAX ≥0.4.0 (automatic differentiation)</p></li>
+<li><p>Matplotlib ≥3.5 (optional plotting)</p></li>
+<li><p>Pytest ≥7.0 (testing framework)</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="testing-validation">
+<h2>Testing &amp; Validation<a class="headerlink" href="#testing-validation" title="Link to this heading"></a></h2>
+<p>The implementation includes comprehensive tests:</p>
+<ul class="simple">
+<li><p><strong>Unit Tests</strong>: Individual component validation</p></li>
+<li><p><strong>Integration Tests</strong>: End-to-end workflow testing</p></li>
+<li><p><strong>Deployment Tests</strong>: Real-world data pattern validation</p></li>
+<li><p><strong>Mathematical Verification</strong>: Gradient and loss computation accuracy</p></li>
+</ul>
+<p>Run the test suite:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run all tests</span>
+pytest<span class="w"> </span>test/
+
+<span class="c1"># Run deployment validation</span>
+python<span class="w"> </span>test/deployment_tests_simple.py
+</pre></div>
+</div>
+</section>
+<section id="performance-characteristics">
+<h2>Performance Characteristics<a class="headerlink" href="#performance-characteristics" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt><strong>Strengths:</strong></dt><dd><ul class="simple">
+<li><p>Mathematically correct implementation</p></li>
+<li><p>Stable training with proper convergence</p></li>
+<li><p>Excellent visualization capabilities</p></li>
+<li><p>Educational value and code clarity</p></li>
+</ul>
+</dd>
+<dt><strong>Current Limitations:</strong></dt><dd><ul class="simple">
+<li><p>Slow convergence on complex patterns</p></li>
+<li><p>Limited to sigmoid activation</p></li>
+<li><p>CPU-only computation (no GPU acceleration)</p></li>
+<li><p>Fixed architecture during training</p></li>
+</ul>
+</dd>
+<dt><strong>Recommended Use Cases:</strong></dt><dd><ul class="simple">
+<li><p>Educational demonstrations</p></li>
+<li><p>Algorithm research and experimentation</p></li>
+<li><p>Small to medium datasets (&lt;1000 samples)</p></li>
+<li><p>Proof-of-concept neural network applications</p></li>
+</ul>
+</dd>
+</dl>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Examples:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#basic-usage-example">Basic Usage Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#linear-regression-example">Linear Regression Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#non-linear-pattern-example">Non-linear Pattern Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#xor-pattern-example">XOR Pattern Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#deployment-testing-example">Deployment Testing Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#custom-training-loop-example">Custom Training Loop Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#performance-tips">Performance Tips</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Development:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#development-setup">Development Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#project-structure">Project Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#development-guidelines">Development Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#areas-for-contribution">Areas for Contribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#code-review-checklist">Code Review Checklist</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#common-development-tasks">Common Development Tasks</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#debugging-tips">Debugging Tips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#getting-help">Getting Help</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">[Unreleased]</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id1">[0.1.0] - 2025-11-21</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and Tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="examples.html" class="btn btn-neutral float-right" title="Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Danilo Carneiro de Souza.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
