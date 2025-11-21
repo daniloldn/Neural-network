@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mynet"
-version = "0.2.0"
+version = "0.2.1"
 description = "Creating my own neural network implementation with JAX-based gradients"
 authors = [
   { name = "Danilo de Souza"}
@@ -18,7 +18,9 @@ dependencies = [
   "jaxlib >=0.4.0",
   "matplotlib >=3.5",
   "pytest >=7.0",
-  "mypy >=1.0"
+  "mypy >=1.0",
+  "sphinx_rtd_theme",
+  "sphinx>=7.0.0"
 ]
 
 [project.optional-dependencies]
