@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mynet"
-version = "0.1.0"
+version = "0.2.0"
 description = "Creating my own neural network implementation with JAX-based gradients"
 authors = [
   { name = "Danilo de Souza"}
